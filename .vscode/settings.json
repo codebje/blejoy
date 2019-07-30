@@ -1,0 +1,9 @@
+{
+    "terminal.integrated.env.osx": {
+        "PATH": "/Users/bje/.platformio/penv/bin:/Users/bje/.platformio/penv:/Users/bje/.nix-profile/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/Library/TeX/texbin:/opt/ghc-mod/.cabal-sandbox/bin:/usr/local/share/dotnet:/opt/X11/bin:/usr/local/bin:/Users/bje/bin:/Users/bje/.netpbm/bin:/Users/bje/Library/Android/sdk/tools:/Users/bje/Library/Android/sdk/platform-tools:/Users/bje/Library/Android/sdk/build-tools/17.0.0:/Users/bje/.gem/ruby/2.0.0/bin:/Users/bje/ec2/ec2-api-tools-1.6.12.0/bin:/Users/bje/.local/bin:/usr/texbin:/Users/bje/.gcloud/bin:/Users/bje/.cargo/bin",
+        "PLATFORMIO_CALLER": "vscode"
+    },
+    "files.associations": {
+        "event_groups.h": "c"
+    }
+}
