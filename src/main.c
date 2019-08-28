@@ -635,11 +635,3 @@ void app_main() {
     ESP_ERROR_CHECK(gpio_isr_handler_add(PIN_JOYSTICK_DOWN, gpio_isr_handler, (void *)PIN_JOYSTICK_DOWN));
 }
 
-// TODO: adjust bonding techniques
-//       when not bonded previously, advertise for ~180 seconds at 30-50ms
-//       intervals and be in "bondable mode" whatever that may mean
-//       when bonded, save the HID Host address and use in a whitelist
-//       if previously bonded, use undirected or directed connectable mode;
-//       directed first for 1.28 seconds, then 30 seconds of undirected
-//       advertisement with 20-30ms intervals.
-// TODO: may need to require device to re-establish connection when it has
