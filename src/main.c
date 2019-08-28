@@ -1,3 +1,24 @@
+/*
+ *   Copyright 2019 Byron Ellacott
+ *
+ *   Portions of this file are derived from examples provided by
+ *   Espressif Systems at
+ *
+ *      https://github.com/espressif/esp-idf
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ */
 #include <string.h>
 
 #include "freertos/FreeRTOS.h"
@@ -622,4 +643,3 @@ void app_main() {
 //       directed first for 1.28 seconds, then 30 seconds of undirected
 //       advertisement with 20-30ms intervals.
 // TODO: may need to require device to re-establish connection when it has
-//       data to send
