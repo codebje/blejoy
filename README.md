@@ -2,7 +2,8 @@ Quick Design Notes
 
   - ESP32 dev board runs BLE stack as gamepad device
   - perf-board takes connections for all inputs
-  - battery board provides power, not sure how to control on/off yet
+  - battery board provides power, rudimentary on/off via a toggle switch
+  - TODO expose USB port for charging and debugging/programming
 
 ESP32 interrupt driven to set notification on BLE comms task, multiple
 notifications are okay, just send current state whenever anything's changed.
