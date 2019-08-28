@@ -20,13 +20,23 @@
 #define BLEJOY_PROFILE_APP_ID   0xb1e
 #define BLEJOY_SVC_INST_ID      0x00
 
-#define PIN_BUTTON_1            32
-#define PIN_JOYSTICK_LEFT       27
-#define PIN_JOYSTICK_RIGHT      26
-#define PIN_JOYSTICK_UP         33
-#define PIN_JOYSTICK_DOWN       25
+#define PIN_BUTTON_0            16
+#define PIN_BUTTON_1            17
+#define PIN_BUTTON_2            18
+#define PIN_BUTTON_3            19
+#define PIN_BUTTON_4            21
+#define PIN_BUTTON_5            22
+#define PIN_BUTTON_START        23
+#define PIN_BUTTON_SELECT       32
+#define PIN_JOYSTICK_LEFT       33
+#define PIN_JOYSTICK_RIGHT      25
+#define PIN_JOYSTICK_UP         26
+#define PIN_JOYSTICK_DOWN       27
 
-#define PIN_SELECTOR (BIT64(PIN_BUTTON_1) | \
+#define PIN_SELECTOR (BIT64(PIN_BUTTON_0) | BIT64(PIN_BUTTON_1) | \
+                      BIT64(PIN_BUTTON_2) | BIT64(PIN_BUTTON_3) | \
+                      BIT64(PIN_BUTTON_4) | BIT64(PIN_BUTTON_5) | \
+                      BIT64(PIN_BUTTON_START) | BIT64(PIN_BUTTON_SELECT) | \
                       BIT64(PIN_JOYSTICK_LEFT) | BIT64(PIN_JOYSTICK_RIGHT) | \
                       BIT64(PIN_JOYSTICK_UP)   | BIT64(PIN_JOYSTICK_DOWN))
 #define ESP_INTR_FLAG_DEFAULT 0  
@@ -53,6 +63,7 @@ struct gatts_profile_inst {
 };
 
 struct hid_report {
+    uint16_t button_0 : 1;
     uint16_t button_1 : 1;
     uint16_t button_2 : 1;
     uint16_t button_3 : 1;
@@ -67,7 +78,7 @@ struct hid_report {
     uint16_t button_12 : 1;
     uint16_t button_13 : 1;
     uint16_t button_14 : 1;
-    uint16_t button_padding : 2;
+    uint16_t button_15 : 1;
     int8_t joystick_x;
     int8_t joystick_y;
 } __attribute__((packed));
@@ -105,7 +116,7 @@ const uint8_t report_map[] = {
   0x75, 0x02,  /*     REPORT_SIZE (2)                */
   0x81, 0x03,  /*     INPUT (Cnst)                   */
   0xa1, 0x00,  /*     COLLECTION (Physical)          */
-  0x05, 0x01,  /*       USAGE_PAGE (Generic Desktop) */
+  0x05, 0x01,  /*       USAGE_PAGE (Generic Desktop) */  
   0x09, 0x30,  /*       USAGE (X)                    */
   0x09, 0x31,  /*       USAGE (Y)                    */
   0x15, 0x00,  /*       LOGICAL_MINIMUM (0)          */
@@ -469,7 +480,14 @@ void input_task(void *args) {
             hid_report.joystick_y = (gpio & BIT64(PIN_JOYSTICK_UP))
                                   ? ((gpio & BIT64(PIN_JOYSTICK_DOWN)) ? 50 : 0)
                                   : 100;
+            hid_report.button_0 = !(gpio & BIT64(PIN_BUTTON_0));
             hid_report.button_1 = !(gpio & BIT64(PIN_BUTTON_1));
+            hid_report.button_2 = !(gpio & BIT64(PIN_BUTTON_2));
+            hid_report.button_3 = !(gpio & BIT64(PIN_BUTTON_3));
+            hid_report.button_4 = !(gpio & BIT64(PIN_BUTTON_4));
+            hid_report.button_5 = !(gpio & BIT64(PIN_BUTTON_5));
+            hid_report.button_9 = !(gpio & BIT64(PIN_BUTTON_START));
+            hid_report.button_8 = !(gpio & BIT64(PIN_BUTTON_SELECT));
             if (changed) {
                 ESP_LOGI(BLEJOY_TAG, "joystick x: %d, joystick y: %d", hid_report.joystick_x, hid_report.joystick_y);
                 ESP_LOGI(BLEJOY_TAG, "reg: %08llx (%08llx)", gpio, gpio & PIN_SELECTOR);
@@ -582,7 +600,14 @@ void app_main() {
     config.pin_bit_mask = PIN_SELECTOR;
     gpio_config(&config);
     gpio_install_isr_service(ESP_INTR_FLAG_DEFAULT);
+    ESP_ERROR_CHECK(gpio_isr_handler_add(PIN_BUTTON_0, gpio_isr_handler, (void *)PIN_BUTTON_0));
     ESP_ERROR_CHECK(gpio_isr_handler_add(PIN_BUTTON_1, gpio_isr_handler, (void *)PIN_BUTTON_1));
+    ESP_ERROR_CHECK(gpio_isr_handler_add(PIN_BUTTON_2, gpio_isr_handler, (void *)PIN_BUTTON_2));
+    ESP_ERROR_CHECK(gpio_isr_handler_add(PIN_BUTTON_3, gpio_isr_handler, (void *)PIN_BUTTON_3));
+    ESP_ERROR_CHECK(gpio_isr_handler_add(PIN_BUTTON_4, gpio_isr_handler, (void *)PIN_BUTTON_4));
+    ESP_ERROR_CHECK(gpio_isr_handler_add(PIN_BUTTON_5, gpio_isr_handler, (void *)PIN_BUTTON_5));
+    ESP_ERROR_CHECK(gpio_isr_handler_add(PIN_BUTTON_START, gpio_isr_handler, (void *)PIN_BUTTON_START));
+    ESP_ERROR_CHECK(gpio_isr_handler_add(PIN_BUTTON_SELECT, gpio_isr_handler, (void *)PIN_BUTTON_SELECT));
     ESP_ERROR_CHECK(gpio_isr_handler_add(PIN_JOYSTICK_LEFT, gpio_isr_handler, (void *)PIN_JOYSTICK_LEFT));
     ESP_ERROR_CHECK(gpio_isr_handler_add(PIN_JOYSTICK_RIGHT, gpio_isr_handler, (void *)PIN_JOYSTICK_RIGHT));
     ESP_ERROR_CHECK(gpio_isr_handler_add(PIN_JOYSTICK_UP, gpio_isr_handler, (void *)PIN_JOYSTICK_UP));
